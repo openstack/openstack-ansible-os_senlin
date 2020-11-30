@@ -176,7 +176,7 @@ senlin_health_manager_threads: 1000
 
 ## Cap the maximum number of threads / workers when a user value is unspecified.
 senlin_api_threads_max: 16
-senlin_api_threads: "{{ [[ansible_processor_vcpus|default(2) // 2, 1] | max, senlin_api_threads_max] | min }}"
+senlin_api_threads: "{{ [[(ansible_processor_vcpus//ansible_processor_threads_per_core)|default(1), 1] | max * 2, senlin_api_threads_max] | min }}"
 
 senlin_service_in_ldap: false
 
