@@ -128,7 +128,36 @@
     - senlin-config
     - uwsgi
 
-- import_tasks: senlin_service_setup.yml
+- include_tasks: service_setup.yml
+  vars:
+    _project_name: "{{ senlin_project_name }}"
+    _project_domain: "{{ senlin_project_domain_name }}"
+    _service_adminuri_insecure: "{{ keystone_service_adminuri_insecure }}"
+    _service_in_ldap: "{{ senlin_service_in_ldap }}"
+    _service_setup_host: "{{ senlin_service_setup_host }}"
+    _service_setup_host_python_interpreter: "{{ senlin_service_setup_host_python_interpreter }}"
+    _service_project_name: "{{ senlin_service_project_name }}"
+    _service_region: "{{ senlin_service_region }}"
+    _service_users:
+      - name: "{{ senlin_service_user_name }}"
+        password: "{{ senlin_service_password }}"
+        domain: default
+        project: "{{ senlin_service_project_name }}"
+        role: "{{ senlin_service_role_name }}"
+    _service_endpoints:
+      - service: "{{ senlin_service_name }}"
+        interface: "public"
+        url: "{{ senlin_service_publicurl }}"
+      - service: "{{ senlin_service_name }}"
+        interface: "internal"
+        url: "{{ senlin_service_internalurl }}"
+      - service: "{{ senlin_service_name }}"
+        interface: "admin"
+        url: "{{ senlin_service_adminurl }}"
+    _service_catalog:
+      - name: "{{ senlin_service_name }}"
+        type: "{{ senlin_service_type }}"
+        description: "{{ senlin_service_description }}"
   when:
     - _senlin_is_first_play_host
   tags:

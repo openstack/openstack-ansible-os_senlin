@@ -100,12 +100,6 @@ senlin_project_domain_name: Default
 senlin_project_name: admin
 senlin_user_domain_name: Default
 
-## Stack
-senlin_stack_domain_admin: stack_domain_admin
-senlin_stack_owner_name: senlin_stack_owner
-senlin_stack_domain_description: Owns users and projects created by senlin
-senlin_stack_user_domain_name: senlin
-
 # osprofiler
 senlin_profiler_enabled: false
 senlin_profiler_trace_sqlalchemy: false
@@ -247,7 +241,7 @@ senlin_services:
 senlin_required_secrets:
   - keystone_auth_admin_password
   - senlin_galera_password
-  - senlin_rabbitmq_password
+  - senlin_oslomsg_rpc_password
   - senlin_service_password
   - memcached_encryption_key
 

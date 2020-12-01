@@ -8,29 +8,8 @@ Dependencies
 
 This role needs pip >= 7.1 installed on the target host.
 
-To use this role, define the following variables:
-
-.. code-block:: yaml
-
-    # password of the keystone service user for senlin
-    senlin_service_password: "secrete"
-    # password of the admin user for the keystone senlin domain
-    senlin_stack_domain_admin_password: "secrete"
-    # key used for encrypting credentials stored in the senlin db
-    senlin_auth_encryption_key: "32characterslongboguskeyvaluefoo"
-    # password for senlin database
-    senlin_container_mysql_password: "secrete"
-    # password for senlin RabbitMQ vhost
-    senlin_rabbitmq_password: "secrete"
-    # comma-separated list of RabbitMQ hosts
-    rabbitmq_servers: 10.100.100.101
-    # Keystone admin user for service, domain, project, role creation
-    keystone_admin_user_name: "admin"
-    # Keystone admin password for service, domain, project, role creation
-    keystone_auth_admin_password: "secrete"
-
 To clone or view the source code for this repository, visit the role repository
-for `os_senlin <https://github.com/openstack/openstack-ansible-os_senlin>`_.
+for `os_senlin <https://opendev.org/openstack/openstack-ansible-os_senlin>`_.
 
 Default variables
 ~~~~~~~~~~~~~~~~~
