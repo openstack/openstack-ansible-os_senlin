@@ -49,7 +49,7 @@
 
 - import_tasks: db_setup.yml
   when:
-    - inventory_hostname == groups['senlin_all'][0]
+    - _senlin_is_first_play_host
   vars:
     _oslodb_setup_host: "{{ senlin_db_setup_host }}"
     _oslodb_ansible_python_interpreter: "{{ senlin_db_setup_python_interpreter }}"
@@ -66,7 +66,7 @@
 
 - import_tasks: mq_setup.yml
   when:
-    - inventory_hostname == groups['senlin_all'][0]
+    - _senlin_is_first_play_host
   vars:
     _oslomsg_rpc_setup_host: "{{ senlin_oslomsg_rpc_setup_host }}"
     _oslomsg_rpc_userid: "{{ senlin_oslomsg_rpc_userid }}"
@@ -114,7 +114,7 @@
 
 - import_tasks: senlin_db_sync.yml
   when:
-    - "inventory_hostname == ansible_play_hosts[0]"
+    - _senlin_is_first_play_host
   tags:
     - senlin-config
 
@@ -130,7 +130,7 @@
 
 - import_tasks: senlin_service_setup.yml
   when:
-    - "inventory_hostname == ansible_play_hosts[0]"
+    - _senlin_is_first_play_host
   tags:
     - senlin-config
 
