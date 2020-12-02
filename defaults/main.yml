@@ -231,7 +231,7 @@ senlin_services:
     init_config_overrides: "{{ senlin_conductor_init_overrides }}"
     start_order: 2
   senlin-health-manager:
-    group: senlin_health-manager
+    group: senlin_health_manager
     service_name: senlin-health-manager
     execstarts: "{{ senlin_bin }}/senlin-health-manager"
     init_config_overrides: "{{ senlin_health_manager_init_overrides }}"
