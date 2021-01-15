@@ -178,7 +178,7 @@ senlin_service_in_ldap: "{{ service_ldap_backend_enabled | default(False) }}"
 # Common pip packages
 senlin_pip_packages:
   - cryptography
-  - "git+{{ senlin_git_repo }}@{{ senlin_git_install_branch }}#egg=openstack-senlin"
+  - "git+{{ senlin_git_repo }}@{{ senlin_git_install_branch }}#egg=senlin"
   - keystonemiddleware
   - osprofiler
   - PyMySQL

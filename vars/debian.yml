@@ -26,6 +26,7 @@ senlin_devel_distro_packages:
 
 senlin_service_distro_packages:
   - python3-senlin
+  - senlin-common
   - python3-systemd
 
 senlin_oslomsg_amqp1_distro_packages:
