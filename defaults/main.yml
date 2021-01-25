@@ -41,7 +41,6 @@ senlin_git_repo: https://opendev.org/openstack/senlin
 senlin_git_install_branch: master
 senlin_upper_constraints_url: "{{ requirements_git_url | default('https://releases.openstack.org/constraints/upper/' ~ requirements_git_install_branch | default('master')) }}"
 senlin_git_constraints:
-  - "git+{{ senlin_git_repo }}@{{ senlin_git_install_branch }}#egg=openstack-senlin"
   - "--constraint {{ senlin_upper_constraints_url }}"
 
 senlin_pip_install_args: "{{ pip_install_options | default('') }}"
@@ -184,7 +183,7 @@ senlin_service_in_ldap: false
 # Common pip packages
 senlin_pip_packages:
   - cryptography
-  - senlin
+  - "git+{{ senlin_git_repo }}@{{ senlin_git_install_branch }}#egg=openstack-senlin"
   - keystonemiddleware
   - osprofiler
   - PyMySQL
