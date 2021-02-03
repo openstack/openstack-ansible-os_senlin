@@ -162,10 +162,6 @@ senlin_service_down_time: 60
 # senlin_api_workers: 4
 # senlin_conductor_workers: 4
 # senlin_health_manager_workers: 4
-## Number of threads
-senlin_engine_threads: 1000
-senlin_conductor_threads: 1000
-senlin_health_manager_threads: 1000
 
 ## Cap the maximum number of threads / workers when a user value is unspecified.
 senlin_api_threads_max: 16
