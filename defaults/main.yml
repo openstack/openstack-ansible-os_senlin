@@ -17,7 +17,7 @@
 # These don't have to be explicitly imported by vars_files: they are autopopulated.
 
 # Enable/Disable Ceilometer
-senlin_ceilometer_enabled: False
+senlin_ceilometer_enabled: "{{ (groups['ceilometer_all'] is defined) and (groups['ceilometer_all'] | length > 0) }}"
 
 ## Verbosity Options
 debug: False
@@ -28,10 +28,9 @@ debug: False
 senlin_service_setup_host: "{{ openstack_service_setup_host | default('localhost') }}"
 senlin_service_setup_host_python_interpreter: "{{ openstack_service_setup_host_python_interpreter | default((senlin_service_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_python['executable'])) }}"
 
-# Set the package install state for distribution and pip packages
+# Set the package install state for distribution packages
 # Options are 'present' and 'latest'
-senlin_package_state: "latest"
-senlin_pip_package_state: "latest"
+senlin_package_state: "{{ package_state | default('latest') }}"
 
 # Set installation method.
 senlin_install_method: "source"
@@ -59,7 +58,7 @@ senlin_galera_user: senlin
 senlin_galera_database: senlin
 senlin_galera_use_ssl: "{{ galera_use_ssl | default(False) }}"
 senlin_galera_ssl_ca_cert: "{{ galera_ssl_ca_cert | default('/etc/ssl/certs/galera-ca.pem') }}"
-senlin_galera_port: 3306
+senlin_galera_port: "{{ galera_port | default('3306') }}"
 
 ## Oslo Messaging Info
 # RPC
@@ -104,7 +103,7 @@ senlin_profiler_enabled: false
 senlin_profiler_trace_sqlalchemy: false
 
 ## Auth
-senlin_service_region: RegionOne
+senlin_service_region: "{{ service_region | default('RegionOne') }}"
 senlin_service_project_name: "service"
 senlin_service_user_name: "senlin"
 senlin_service_role_name: admin
@@ -167,7 +166,7 @@ senlin_service_down_time: 60
 senlin_api_threads_max: 16
 senlin_api_threads: "{{ [[(ansible_processor_vcpus//ansible_processor_threads_per_core)|default(1), 1] | max * 2, senlin_api_threads_max] | min }}"
 
-senlin_service_in_ldap: false
+senlin_service_in_ldap: "{{ service_ldap_backend_enabled | default(False) }}"
 
 ## Policy vars
 # Provide a list of access controls to update the default policy.json with. These changes will be merged
