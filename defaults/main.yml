@@ -200,6 +200,9 @@ senlin_engine_init_overrides: {}
 senlin_conductor_init_overrides: {}
 senlin_health_manager_init_overrides: {}
 
+## Allow Enable/Disable uWSGI
+senlin_use_uwsgi: True
+
 ## Service Name-Group Mapping
 senlin_services:
   senlin-api:
@@ -207,7 +210,8 @@ senlin_services:
     service_name: senlin-api
     init_config_overrides: "{{ senlin_api_init_overrides }}"
     start_order: 4
-    wsgi_app: True
+    execstarts: "{{ senlin_bin }}/senlin-api"
+    wsgi_app: "{{ senlin_use_uwsgi }}"
     wsgi_name: senlin-wsgi-api
     uwsgi_overrides: "{{ senlin_api_uwsgi_ini_overrides }}"
     uwsgi_port: "{{ senlin_service_port }}"
