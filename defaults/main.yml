@@ -33,7 +33,7 @@ senlin_service_setup_host_python_interpreter: "{{ openstack_service_setup_host_p
 senlin_package_state: "{{ package_state | default('latest') }}"
 
 # Set installation method.
-senlin_install_method: "source"
+senlin_install_method: "{{ service_install_method | default('source') }}"
 senlin_venv_python_executable: "{{ openstack_venv_python_executable | default('python3') }}"
 
 senlin_git_repo: https://opendev.org/openstack/senlin
