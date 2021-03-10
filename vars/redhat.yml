@@ -27,7 +27,7 @@ senlin_service_distro_packages:
   - openstack-senlin-api
   - openstack-senlin-conductor
   - openstack-senlin-health-manager
-  - "{{ ansible_distribution_major_version is version('8', '<') | ternary('systemd-python', 'python3-systemd') }}"
+  - python3-systemd
 
 senlin_oslomsg_amqp1_distro_packages:
   - cyrus-sasl-lib
