@@ -25,12 +25,27 @@
   notify:
     - Restart senlin services
 
-- name: Implement policy.json if there are overrides configured
-  copy:
-    content: "{{ senlin_policy_overrides | to_nice_json }}"
-    dest: "/etc/senlin/policy.json"
+- name: Implement policy.yaml if there are overrides configured
+  config_template:
+    content: "{{ senlin_policy_overrides }}"
+    dest: "/etc/senlin/policy.yaml"
+    owner: "root"
+    group: "{{ senlin_system_group_name }}"
+    mode: "0640"
+    config_type: yaml
   when:
-    - senlin_policy_overrides != {}
+    - senlin_policy_overrides | length > 0
+  tags:
+    - senlin-policy-override
+
+- name: Remove legacy policy.yaml file
+  file:
+    path: "/etc/senlin/policy.yaml"
+    state: absent
+  when:
+    - senlin_policy_overrides | length == 0
+  tags:
+    - senlin-policy-override
 
 # NOTE(cloudnull): This is using "cp" instead of copy with a remote_source
 #                  because we only want to copy the original files once. and we
