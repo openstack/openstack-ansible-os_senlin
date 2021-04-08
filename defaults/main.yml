@@ -34,7 +34,7 @@ senlin_package_state: "{{ package_state | default('latest') }}"
 
 # Set installation method.
 senlin_install_method: "source"
-senlin_venv_python_executable: "{{ openstack_venv_python_executable | default('python2') }}"
+senlin_venv_python_executable: "{{ openstack_venv_python_executable | default('python3') }}"
 
 senlin_git_repo: https://opendev.org/openstack/senlin
 senlin_git_install_branch: master
