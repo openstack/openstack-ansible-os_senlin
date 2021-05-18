@@ -70,6 +70,8 @@ senlin_oslomsg_rpc_port: "{{ oslomsg_rpc_port | default('5672') }}"
 senlin_oslomsg_rpc_use_ssl: "{{ oslomsg_rpc_use_ssl | default(False) }}"
 senlin_oslomsg_rpc_userid: senlin
 senlin_oslomsg_rpc_vhost: /senlin
+senlin_oslomsg_rpc_ssl_version: "{{ oslomsg_rpc_ssl_version | default('TLSv1_2') }}"
+senlin_oslomsg_rpc_ssl_ca_file: "{{ oslomsg_rpc_ssl_ca_file | default('') }}"
 
 # Notify
 senlin_oslomsg_notify_host_group: "{{ oslomsg_notify_host_group | default('rabbitmq_all') }}"
@@ -81,6 +83,8 @@ senlin_oslomsg_notify_use_ssl: "{{ oslomsg_notify_use_ssl | default(False) }}"
 senlin_oslomsg_notify_userid: "{{ senlin_oslomsg_rpc_userid }}"
 senlin_oslomsg_notify_password: "{{ senlin_oslomsg_rpc_password }}"
 senlin_oslomsg_notify_vhost: "{{ senlin_oslomsg_rpc_vhost }}"
+senlin_oslomsg_notify_ssl_version: "{{ oslomsg_notify_ssl_version | default('TLSv1_2') }}"
+senlin_oslomsg_notify_ssl_ca_file: "{{ oslomsg_notify_ssl_ca_file | default('') }}"
 
 ## (Qdrouterd) integration
 # TODO(ansmith): Change structure when more backends will be supported
