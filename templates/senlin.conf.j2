@@ -37,7 +37,7 @@ engine_life_check_timeout = {{ senlin_engine_life_check_timeout }}
 service_down_time = {{ senlin_service_down_time }}
 
 [database]
-connection = mysql+pymysql://{{ senlin_galera_user }}:{{ senlin_galera_password }}@{{ senlin_galera_address }}/{{ senlin_galera_database }}?charset=utf8{% if senlin_galera_use_ssl | bool %}&ssl_ca={{ senlin_galera_ssl_ca_cert }}{% endif %}
+connection = mysql+pymysql://{{ senlin_galera_user }}:{{ senlin_galera_password }}@{{ senlin_galera_address }}/{{ senlin_galera_database }}?charset=utf8{% if senlin_galera_use_ssl | bool %}&ssl_verify_cert=true{% if senlin_galera_ssl_ca_cert | length > 0 %}&ssl_ca={{ senlin_galera_ssl_ca_cert }}{% endif %}{% endif %}
 
 [senlin_api]
 bind_port = {{ senlin_service_port }}
