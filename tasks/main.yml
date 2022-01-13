@@ -52,7 +52,12 @@
   tags:
     - always
 
-- import_tasks: db_setup.yml
+- include_role:
+    name: openstack.osa.db_setup
+    apply:
+      tags:
+        - common-db
+        - senlin-config
   when:
     - _senlin_is_first_play_host
   vars:
@@ -66,10 +71,14 @@
           - username: "{{ senlin_galera_user }}"
             password: "{{ senlin_galera_password }}"
   tags:
-    - common-db
-    - senlin-config
+    - always
 
-- import_tasks: mq_setup.yml
+- include_role:
+    name: openstack.osa.mq_setup
+    apply:
+      tags:
+        - common-mq
+        - senlin-config
   when:
     - _senlin_is_first_play_host
   vars:
@@ -84,8 +93,7 @@
     _oslomsg_notify_vhost: "{{ senlin_oslomsg_notify_vhost }}"
     _oslomsg_notify_transport: "{{ senlin_oslomsg_notify_transport }}"
   tags:
-    - common-mq
-    - senlin-config
+    - always
 
 - import_tasks: senlin_pre_install.yml
   tags:
@@ -133,7 +141,12 @@
     - senlin-config
     - uwsgi
 
-- include_tasks: service_setup.yml
+- include_role:
+    name: openstack.osa.service_setup
+    apply:
+      tags:
+        - common-service
+        - senlin-config
   vars:
     _project_name: "{{ senlin_project_name }}"
     _project_domain: "{{ senlin_project_domain_name }}"
@@ -166,7 +179,7 @@
   when:
     - _senlin_is_first_play_host
   tags:
-    - senlin-config
+    - always
 
 - name: Flush handlers
   meta: flush_handlers
