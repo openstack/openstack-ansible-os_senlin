@@ -161,7 +161,7 @@
         password: "{{ senlin_service_password }}"
         domain: default
         project: "{{ senlin_service_project_name }}"
-        role: "{{ senlin_service_role_name }}"
+        role: "{{ senlin_service_role_names }}"
     _service_endpoints:
       - service: "{{ senlin_service_name }}"
         interface: "public"
