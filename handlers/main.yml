@@ -22,3 +22,4 @@
   with_items: "{{ filtered_senlin_services }}"
   listen:
     - "venv changed"
+    - "systemd service changed"
