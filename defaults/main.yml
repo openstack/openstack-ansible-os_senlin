@@ -229,6 +229,7 @@ senlin_services:
     uwsgi_overrides: "{{ senlin_api_uwsgi_ini_overrides }}"
     uwsgi_port: "{{ senlin_service_port }}"
     uwsgi_bind_address: "{{ senlin_api_uwsgi_bind_address }}"
+    uwsgi_tls: "{{ senlin_backend_ssl | ternary(senlin_uwsgi_tls, {}) }}"
   senlin-engine:
     group: senlin_engine
     service_name: senlin-engine
@@ -263,6 +264,9 @@ senlin_wsgi_processes: "{{ [[ansible_facts['processor_vcpus']|default(1), 1] | m
 senlin_wsgi_threads: 1
 senlin_api_uwsgi_bind_address: "{{ openstack_service_bind_address | default('0.0.0.0') }}"
 #senlin_api_cfn_uwsgi_bind_address: "{{ openstack_service_bind_address | default('0.0.0.0') }}"
+senlin_uwsgi_tls:
+  crt: "{{ senlin_ssl_cert }}"
+  key: "{{ senlin_ssl_key }}"
 
 senlin_role_project_group: senlin_all
 
@@ -273,3 +277,51 @@ senlin_default_yaml_overrides: {}
 senlin_aws_cloudwatch_alarm_yaml_overrides: {}
 senlin_aws_rds_dbinstance_yaml_overrides: {}
 senlin_policy_overrides: {}
+
+###
+### Backend TLS
+###
+
+# Define if communication between haproxy and service backends should be
+# encrypted with TLS.
+senlin_backend_ssl: "{{ openstack_service_backend_ssl | default(False) }}"
+
+# Storage location for SSL certificate authority
+senlin_pki_dir: "{{ openstack_pki_dir | default('/etc/openstack_deploy/pki') }}"
+
+# Delegated host for operating the certificate authority
+senlin_pki_setup_host: "{{ openstack_pki_setup_host | default('localhost') }}"
+
+# senlin server certificate
+senlin_pki_keys_path: "{{ senlin_pki_dir ~ '/certs/private/' }}"
+senlin_pki_certs_path: "{{ senlin_pki_dir ~ '/certs/certs/' }}"
+senlin_pki_intermediate_cert_name: "{{ openstack_pki_service_intermediate_cert_name | default('ExampleCorpIntermediate') }}"
+senlin_pki_regen_cert: ''
+senlin_pki_san: "{{ openstack_pki_san | default('DNS:' ~ ansible_facts['hostname'] ~ ',IP:' ~ management_address) }}"
+senlin_pki_certificates:
+  - name: "senlin_{{ ansible_facts['hostname'] }}"
+    provider: ownca
+    cn: "{{ ansible_facts['hostname'] }}"
+    san: "{{ senlin_pki_san }}"
+    signed_by: "{{ senlin_pki_intermediate_cert_name }}"
+
+# senlin destination files for SSL certificates
+senlin_ssl_cert: /etc/senlin/senlin.pem
+senlin_ssl_key: /etc/senlin/senlin.key
+
+# Installation details for SSL certificates
+senlin_pki_install_certificates:
+  - src: "{{ senlin_user_ssl_cert | default(senlin_pki_certs_path ~ 'senlin_' ~ ansible_facts['hostname'] ~ '-chain.crt') }}"
+    dest: "{{ senlin_ssl_cert }}"
+    owner: "{{ senlin_system_user_name }}"
+    group: "{{ senlin_system_user_name }}"
+    mode: "0644"
+  - src: "{{ senlin_user_ssl_key | default(senlin_pki_keys_path ~ 'senlin_' ~ ansible_facts['hostname'] ~ '.key.pem') }}"
+    dest: "{{ senlin_ssl_key }}"
+    owner: "{{ senlin_system_user_name }}"
+    group: "{{ senlin_system_user_name }}"
+    mode: "0600"
+
+# Define user-provided SSL certificates
+#senlin_user_ssl_cert: <path to cert on ansible deployment host>
+#senlin_user_ssl_key: <path to cert on ansible deployment host>

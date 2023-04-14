@@ -102,6 +102,26 @@
   tags:
     - senlin-install
 
+- name: Create and install SSL certificates
+  include_role:
+    name: pki
+    tasks_from: main_certs.yml
+    apply:
+      tags:
+        - senlin-config
+        - pki
+  vars:
+    pki_setup_host: "{{ senlin_pki_setup_host }}"
+    pki_dir: "{{ senlin_pki_dir }}"
+    pki_create_certificates: "{{ senlin_user_ssl_cert is not defined and senlin_user_ssl_key is not defined }}"
+    pki_regen_cert: "{{ senlin_pki_regen_cert }}"
+    pki_certificates: "{{ senlin_pki_certificates }}"
+    pki_install_certificates: "{{ senlin_pki_install_certificates }}"
+  when:
+    - senlin_backend_ssl
+  tags:
+    - always
+
 - import_tasks: senlin_post_install.yml
   tags:
     - senlin-config
