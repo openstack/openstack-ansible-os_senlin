@@ -51,7 +51,8 @@
   tags:
     - always
 
-- include_role:
+- name: Including osa.db_setup role
+  include_role:
     name: openstack.osa.db_setup
     apply:
       tags:
@@ -72,7 +73,8 @@
   tags:
     - always
 
-- include_role:
+- name: Including osa.mq_setup role
+  include_role:
     name: openstack.osa.mq_setup
     apply:
       tags:
@@ -94,11 +96,13 @@
   tags:
     - always
 
-- import_tasks: senlin_pre_install.yml
+- name: Importing senlin_pre_install tasks
+  import_tasks: senlin_pre_install.yml
   tags:
     - senlin-install
 
-- import_tasks: senlin_install.yml
+- name: Importing senlin_install tasks
+  import_tasks: senlin_install.yml
   tags:
     - senlin-install
 
@@ -122,7 +126,8 @@
   tags:
     - always
 
-- import_tasks: senlin_post_install.yml
+- name: Importing senlin_post_install tasks
+  import_tasks: senlin_post_install.yml
   tags:
     - senlin-config
 
@@ -135,16 +140,17 @@
     systemd_tempd_prefix: openstack
     systemd_slice_name: senlin
     systemd_lock_path: /var/lock/senlin
-    systemd_CPUAccounting: true
-    systemd_BlockIOAccounting: true
-    systemd_MemoryAccounting: true
-    systemd_TasksAccounting: true
+    systemd_service_cpu_accounting: true
+    systemd_service_block_io_accounting: true
+    systemd_service_memory_accounting: true
+    systemd_service_tasks_accounting: true
     systemd_services: "{{ filtered_senlin_services }}"
   tags:
     - senlin-config
     - systemd-service
 
-- import_tasks: senlin_db_sync.yml
+- name: Importing senlin_db_sync tasks
+  import_tasks: senlin_db_sync.yml
   when:
     - _senlin_is_first_play_host
   tags:
@@ -160,7 +166,8 @@
     - senlin-config
     - uwsgi
 
-- include_role:
+- name: Including osa.service_setup role
+  include_role:
     name: openstack.osa.service_setup
     apply:
       tags:

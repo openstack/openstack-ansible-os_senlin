@@ -26,7 +26,11 @@ debug: False
 # for the service setup. The host must already have
 # clouds.yaml properly configured.
 senlin_service_setup_host: "{{ openstack_service_setup_host | default('localhost') }}"
-senlin_service_setup_host_python_interpreter: "{{ openstack_service_setup_host_python_interpreter | default((senlin_service_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_facts['python']['executable'])) }}"
+senlin_service_setup_host_python_interpreter: >-
+  {{
+    openstack_service_setup_host_python_interpreter | default(
+      (senlin_service_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_facts['python']['executable']))
+  }}
 
 # Set the package install state for distribution packages
 # Options are 'present' and 'latest'
@@ -38,7 +42,8 @@ senlin_venv_python_executable: "{{ openstack_venv_python_executable | default('p
 
 senlin_git_repo: https://opendev.org/openstack/senlin
 senlin_git_install_branch: master
-senlin_upper_constraints_url: "{{ requirements_git_url | default('https://releases.openstack.org/constraints/upper/' ~ requirements_git_install_branch | default('master')) }}"
+senlin_upper_constraints_url: >-
+  {{ requirements_git_url | default('https://releases.openstack.org/constraints/upper/' ~ requirements_git_install_branch | default('master')) }}
 senlin_git_constraints:
   - "--constraint {{ senlin_upper_constraints_url }}"
 
@@ -52,7 +57,11 @@ senlin_fatal_deprecations: False
 
 ## Database info
 senlin_db_setup_host: "{{ openstack_db_setup_host | default('localhost') }}"
-senlin_db_setup_python_interpreter: "{{ openstack_db_setup_python_interpreter | default((senlin_db_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_facts['python']['executable'])) }}"
+senlin_db_setup_python_interpreter: >-
+  {{
+    openstack_db_setup_python_interpreter | default(
+      (senlin_db_setup_host == 'localhost') | ternary(ansible_playbook_python, ansible_facts['python']['executable']))
+  }}
 senlin_galera_address: "{{ galera_address | default('127.0.0.1') }}"
 senlin_galera_user: senlin
 senlin_galera_database: senlin
@@ -177,16 +186,17 @@ senlin_service_down_time: 60
 
 ## Cap the maximum number of threads / workers when a user value is unspecified.
 senlin_api_threads_max: 16
-senlin_api_threads: "{{ [[(ansible_facts['processor_vcpus']//ansible_facts['processor_threads_per_core'])|default(1), 1] | max * 2, senlin_api_threads_max] | min }}"
+senlin_api_threads: >-
+  {{ [[(ansible_facts['processor_vcpus'] // ansible_facts['processor_threads_per_core']) | default(1), 1] | max * 2, senlin_api_threads_max] | min }}
 
 senlin_service_in_ldap: "{{ service_ldap_backend_enabled | default(False) }}"
 
 ## Policy vars
 # Provide a list of access controls to update the default policy.json with. These changes will be merged
 # with the access controls in the default policy.json. E.g.
-#senlin_policy_overrides:
-#  "cloudformation:ListStacks": "rule:deny_stack_user"
-#  "cloudformation:CreateStack": "rule:deny_stack_user"
+# senlin_policy_overrides:
+#   "cloudformation:ListStacks": "rule:deny_stack_user"
+#   "cloudformation:CreateStack": "rule:deny_stack_user"
 
 # Common pip packages
 senlin_pip_packages:
@@ -260,10 +270,10 @@ senlin_required_secrets:
 # uWSGI Settings
 senlin_api_uwsgi_ini_overrides: {}
 senlin_wsgi_processes_max: 16
-senlin_wsgi_processes: "{{ [[ansible_facts['processor_vcpus']|default(1), 1] | max * 2, senlin_wsgi_processes_max] | min }}"
+senlin_wsgi_processes: "{{ [[ansible_facts['processor_vcpus'] | default(1), 1] | max * 2, senlin_wsgi_processes_max] | min }}"
 senlin_wsgi_threads: 1
 senlin_api_uwsgi_bind_address: "{{ openstack_service_bind_address | default('0.0.0.0') }}"
-#senlin_api_cfn_uwsgi_bind_address: "{{ openstack_service_bind_address | default('0.0.0.0') }}"
+# senlin_api_cfn_uwsgi_bind_address: "{{ openstack_service_bind_address | default('0.0.0.0') }}"
 senlin_uwsgi_tls:
   crt: "{{ senlin_ssl_cert }}"
   key: "{{ senlin_ssl_key }}"
@@ -323,5 +333,5 @@ senlin_pki_install_certificates:
     mode: "0600"
 
 # Define user-provided SSL certificates
-#senlin_user_ssl_cert: <path to cert on ansible deployment host>
-#senlin_user_ssl_key: <path to cert on ansible deployment host>
+# senlin_user_ssl_cert: <path to cert on ansible deployment host>
+# senlin_user_ssl_key: <path to cert on ansible deployment host>
