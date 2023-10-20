@@ -11,7 +11,7 @@ use_journal = True
 server_keystone_endpoint_type = public
 
 ## RPC Backend
-transport_url = {{ senlin_oslomsg_rpc_transport }}://{% for host in senlin_oslomsg_rpc_servers.split(',') %}{{ senlin_oslomsg_rpc_userid }}:{{ senlin_oslomsg_rpc_password }}@{{ host }}:{{ senlin_oslomsg_rpc_port }}{% if not loop.last %},{% else %}/{{ senlin_oslomsg_rpc_vhost }}{% if senlin_oslomsg_rpc_use_ssl | bool %}?ssl=1&ssl_version={{ senlin_oslomsg_rpc_ssl_version }}&ssl_ca_file={{ senlin_oslomsg_rpc_ssl_ca_file }}{% else %}?ssl=0{% endif %}{% endif %}{% endfor %}
+transport_url = {{ senlin_oslomsg_rpc_transport }}://{% for host in senlin_oslomsg_rpc_servers.split(',') %}{{ senlin_oslomsg_rpc_userid }}:{{ senlin_oslomsg_rpc_password }}@{{ host }}:{{ senlin_oslomsg_rpc_port }}{% if not loop.last %},{% else %}/{{ _senlin_oslomsg_rpc_vhost_conf }}{% if senlin_oslomsg_rpc_use_ssl | bool %}?ssl=1&ssl_version={{ senlin_oslomsg_rpc_ssl_version }}&ssl_ca_file={{ senlin_oslomsg_rpc_ssl_ca_file }}{% else %}?ssl=0{% endif %}{% endif %}{% endfor %}
 
 # Default region name used to get services endpoints.
 region_name_for_services = {{ senlin_service_region }}
@@ -49,6 +49,9 @@ workers = {{ senlin_api_workers | default(senlin_api_threads) }}
 
 [oslo_messaging_rabbit]
 ssl = {{ senlin_oslomsg_rpc_use_ssl }}
+rabbit_quorum_queue = {{ senlin_oslomsg_rabbit_quorum_queues }}
+rabbit_quorum_delivery_limit = {{ senlin_oslomsg_rabbit_quorum_delivery_limit }}
+rabbit_quorum_max_memory_bytes = {{ senlin_oslomsg_rabbit_quorum_max_memory_bytes }}
 
 {% if senlin_service_publicuri_proto != senlin_service_internaluri_proto %}
 [oslo_middleware]
@@ -58,7 +61,7 @@ enable_proxy_headers_parsing = True
 # Ceilometer options
 [oslo_messaging_notifications]
 driver = {{ (senlin_ceilometer_enabled | bool) | ternary('messagingv2', 'noop') }}
-transport_url = {{ senlin_oslomsg_notify_transport }}://{% for host in senlin_oslomsg_notify_servers.split(',') %}{{ senlin_oslomsg_notify_userid }}:{{ senlin_oslomsg_notify_password }}@{{ host }}:{{ senlin_oslomsg_notify_port }}{% if not loop.last %},{% else %}/{{ senlin_oslomsg_notify_vhost }}{% if senlin_oslomsg_notify_use_ssl | bool %}?ssl=1&ssl_version={{ senlin_oslomsg_notify_ssl_version }}&ssl_ca_file={{ senlin_oslomsg_notify_ssl_ca_file }}{% else %}?ssl=0{% endif %}{% endif %}{% endfor %}
+transport_url = {{ senlin_oslomsg_notify_transport }}://{% for host in senlin_oslomsg_notify_servers.split(',') %}{{ senlin_oslomsg_notify_userid }}:{{ senlin_oslomsg_notify_password }}@{{ host }}:{{ senlin_oslomsg_notify_port }}{% if not loop.last %},{% else %}/{{ _senlin_oslomsg_notify_vhost_conf }}{% if senlin_oslomsg_notify_use_ssl | bool %}?ssl=1&ssl_version={{ senlin_oslomsg_notify_ssl_version }}&ssl_ca_file={{ senlin_oslomsg_notify_ssl_ca_file }}{% else %}?ssl=0{% endif %}{% endif %}{% endfor %}
 
 
 [profiler]

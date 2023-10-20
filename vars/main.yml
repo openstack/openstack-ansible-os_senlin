@@ -18,6 +18,16 @@ _senlin_is_first_play_host: >-
     (senlin_services['senlin-api']['group'] in group_names and
       inventory_hostname == (groups[senlin_services['senlin-api']['group']] | intersect(ansible_play_hosts)) | first) | bool
   }}
+_senlin_oslomsg_rpc_vhost_conf: >-
+  {{
+    (senlin_oslomsg_rpc_vhost is string) | ternary(
+      senlin_oslomsg_rpc_vhost, senlin_oslomsg_rpc_vhost | selectattr('state', 'eq', 'present') | map(attribute='name') | first)
+  }}
+_senlin_oslomsg_notify_vhost_conf: >-
+  {{
+    (senlin_oslomsg_notify_vhost is string) | ternary(
+      senlin_oslomsg_notify_vhost, senlin_oslomsg_notify_vhost | selectattr('state', 'eq', 'present') | map(attribute='name') | first)
+  }}
 
 #
 # Compile a list of the services on a host based on whether
